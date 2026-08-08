@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <ul>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'lookup' %}">Lookup</a></li>
+        <li><a href="{% url 'add_thing' %}">Add Thing</a></li>
+    </ul>
+{% endblock %}

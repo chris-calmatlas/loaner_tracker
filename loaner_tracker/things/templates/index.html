@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>{% block title %}Loaner Tracker{% endblock %}</title>
+</head>
+<header>
+    <ul>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'lookup' %}">Lookup</a></li>
+        <li><a href="{% url 'add_thing' %}">Create New</a></li>
+    </ul>
+</header>
+<body>
+    <h1>{{ title }}</h1>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    <p><small>Created by chris@calmatlas.com</small></p>
+</body>
+</html>
