@@ -5,11 +5,7 @@
     <title>{% block title %}Loaner Tracker{% endblock %}</title>
 </head>
 <header>
-    <ul>
-        <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a href="{% url 'lookup' %}">Lookup</a></li>
-        <li><a href="{% url 'add_thing' %}">Create New</a></li>
-    </ul>
+    {% include "components/navbar.html" %}
 </header>
 <body>
     <h1>{{ title }}</h1>

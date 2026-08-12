@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Thing
+from .models import Thing
 from .admin import ThingAdmin
 
 # Create or update a thing

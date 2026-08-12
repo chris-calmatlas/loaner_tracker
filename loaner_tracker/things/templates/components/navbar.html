@@ -1,0 +1,14 @@
+{% load group_tags %}
+
+<ul>
+    {% if user.is_authenticated %}
+        <li>Hello, <a href="{% url 'user_detail' user.pk %}">{{ user.username }}.</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'list' %}">List</a></li>
+        {% if user|is_in_group:"editors" or user|is_in_group:"staff" %}
+            <li><a href="{% url 'add_thing' %}">Create New</a></li>
+        {% endif %}
+    {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+    {% endif %}
+</ul>

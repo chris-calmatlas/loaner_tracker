@@ -1,9 +1,6 @@
 {% extends "index.html" %}
+{% load static %}
 
 {% block content %}
-    <ul>
-        <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a href="{% url 'lookup' %}">Lookup</a></li>
-        <li><a href="{% url 'add_thing' %}">Add Thing</a></li>
-    </ul>
+    {% include "components/lookup-form.html" %}
 {% endblock %}

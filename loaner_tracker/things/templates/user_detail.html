@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+
+{% block content %}
+<ul>
+    <li>Name: {{ object.username }}</li>
+    <li>Groups: {{ object.groups.all|join:", " }}</li>
+</ul>
+{% endblock %}

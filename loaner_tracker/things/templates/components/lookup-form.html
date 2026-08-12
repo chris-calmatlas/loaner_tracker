@@ -1,0 +1,10 @@
+{% if user.is_authenticated %}
+<form action="{% url 'lookup_thing' %}" method="get">
+    {% csrf_token %}
+    <div>
+        <label for="barcode">Barcode:</label>
+        <input type="text" name="barcode" id="barcode" required />
+        <input type="submit" value="OK" />
+    </div>
+</form>
+{% endif %}

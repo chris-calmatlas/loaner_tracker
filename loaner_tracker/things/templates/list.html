@@ -1,37 +1,34 @@
 {% extends "index.html" %}
+{% load group_tags %}
 
 {% block content %}    
+    {% include "components/lookup-form.html" %}
     <form action="" method="get">
-        <div>
-            <label for="barcode">Barcode:</label>
-            <input type="text" name="barcode" id="barcode" required />
-            <input type="submit" value="OK" />
-        </div>
-    </form>
-    <p>or</p>
-    <form action="" method="get">
+        {% csrf_token %}
         <div>
             <label for="assigned_to">Assigned To:</label>
             <input type="text" name="assigned_to" id="assigned_to"/>
             <input type="submit" value="OK" />
         </div>
     </form>
-    <p>or</p>
-    <form action="" method="get">
-        <div>
-            <input type="submit" value="Clear Lookup" />
-        </div>
-    </form>
 
     {% if searched_by %}
+        <div>
         {% if query %}
             <h2>Results for {{ query }}</h2>
         {% else %}
             <h2>Results for Unassigned</h2>
         {% endif %}
-    {% else %}
-        <h2>All things</h2>
-    {% endif %}
+            <form action="" method="get">
+                {% csrf_token %}
+                <div>
+                    <input type="submit" value="Clear filter" />
+                </div>
+            </form>
+        </div>
+        {% else %}
+            <h2>All things</h2>
+        {% endif %}
     {% if things %}
         <table id="thing_list">
             <thead>
@@ -41,7 +38,6 @@
                 <th class="thing_assigned_to">Assigned To</th>
                 <th class="thing_size">Size</th>
                 <th class="thing_id">ID</th>
-                <th class="bulk_select">Select</th>
             </thead>
             {% for thing in things %}
                 <tr id="row_{{ thing.id }}">
@@ -51,14 +47,15 @@
                     <td class="thing_assigned_to"><a href="{% url 'get_thing' thing.id %}">{{ thing.assigned_to }}</a></td>
                     <td class="thing_size"><a href="{% url 'get_thing' thing.id %}">{{ thing.size }}</a></td>
                     <td class="thing_id"><a href="{% url 'get_thing' thing.id %}">{{ thing.id }}</a></td>
-                    <td class="bulk_select"><input type="checkbox" name="selected" id="selected_{{thing.id}}"></td>
                 </tr>
             {% endfor %}
             </table>
     {% else %}
         {% if searched_by == "barcode" %}
             <h3>{{ query }} not found.</h3>
-            <a href="{% url 'add_thing' %}?barcode={{ query }}"">Click here to add {{ query }}</a>
+            {% if user|is_in_group:"editors" or user|is_in_group:"staff" %}
+                <a href="{% url 'add_thing' %}?barcode={{ query }}"">Click here to add {{ query }}</a>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

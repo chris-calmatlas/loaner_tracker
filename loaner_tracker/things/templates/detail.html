@@ -1,21 +1,29 @@
 {% extends "index.html" %}
 {% load static %}
+{% load group_tags %}
 
 {% block content %}
+    {% include "components/lookup-form.html" %}
     <form id="thing_form" action="" method="post">
         {% csrf_token %}
         <fieldset class="authFieldset" {% if form_disabled %}disabled{% endif %}>
             {{ thing_form.as_ul }}
-            <button type="submit" value="Save" id="button_save">Save</button>
-            {% if form_editable %}
-                <button type="reset" value="Cancel" id="button_cancel">Cancel</button>
-                <button type="button" value="Delete" id="button_delete">Delete</button>
+            {% if user|is_in_group:"editors" or user|is_in_group:"staff" %}
+                <button type="submit" value="Save" id="button_save">Save</button>
+                {% if form_editable %}
+                    <button type="reset" value="Cancel" id="button_cancel">Cancel</button>
+                    {% if user|is_in_group:"staff" %}
+                        <button type="button" value="Delete" id="button_delete">Delete</button>
+                    {% endif %}                    
+                {% endif %}
             {% endif %}
         </fieldset>
-        {% if form_editable %}
-            <button type="button" value="Edit" id="button_edit">Edit</button>
+        {% if user|is_in_group:"editors" or user|is_in_group:"staff" %}
+            {% if form_editable %}
+                <button type="button" value="Edit" id="button_edit">Edit</button>
+            {% endif %}
         {% endif %}
-        <button type="button" value="Back" id="button_back" onclick="window.location.href = '{% url 'lookup' %}'">Back</button>
+        <button type="button" value="Back" id="button_back" onclick="window.location.href = '{% url 'list' %}'">Back</button>
     </form>
     {{ thing_form_ro.as_ul }}
     <script src="{% static 'js/detail.js' %}"></script>
