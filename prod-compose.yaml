@@ -1,0 +1,59 @@
+services:
+  proxy:
+    build: ./nginx
+    restart: always
+    depends_on:
+      - web
+    volumes:
+      -  web-static:/var/www/static
+    networks:
+      - default
+      - proxy
+    hostname: loaner-tracker-proxy
+    ports:
+      - 80:80
+      - 443:443
+
+  web:
+    build: ./loaner_tracker
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - web-static:/usr/src/app/staticfiles
+    networks:
+      - default
+      - isolated
+    hostname: loaner-tracker-web
+
+  db:
+    build: ./postgres
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_USER: django_db
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - isolated
+    hostname: loaner-tracker-db
+    volumes:
+    - ./postgres/db-data:/var/lib/postgresql/
+
+volumes:
+  web-static:
+  db-data:
+
+networks:
+  default:
+  isolated:
+    internal: true
+  proxy:
+    # external: true
+    name: ${PROXY_NETWORK}

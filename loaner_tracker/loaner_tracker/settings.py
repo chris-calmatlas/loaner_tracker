@@ -30,15 +30,14 @@ if os.path.exists(env_path):
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOST = os.environ.get('ALLOWED_HOST', '127.0.0.1')
+ALLOWED_HOST = os.environ.get('ALLOWED_HOST', 'localhost')
 
-ALLOWED_HOSTS = ['127.0.0.1', ALLOWED_HOST]
+ALLOWED_HOSTS = ['127.0.0.1', "localhost", ALLOWED_HOST]
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1/', "https://" + ALLOWED_HOST]
+CSRF_TRUSTED_ORIGINS = ['http://localhost/', "https://" + ALLOWED_HOST, "http://" + ALLOWED_HOST]
 # SECURE_SSL_REDIRECT = True
 
 
@@ -88,18 +87,19 @@ WSGI_APPLICATION = "loaner_tracker.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', '')
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST', 'localhost')
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_db',
+        'USER': 'django_db',
+        'PASSWORD': POSTGRES_PASSWORD,
+        'HOST': POSTGRES_HOST,
+        'PORT': '5432',
     }
 }
 
-if 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=500,
-        conn_health_checks=True,
-    )
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

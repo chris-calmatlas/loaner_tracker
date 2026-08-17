@@ -1,0 +1,39 @@
+services:
+  web:
+    build: ./loaner_tracker
+    restart: no
+    command: sleep infinity
+    depends_on:
+      - db
+    hostname: loaner-tracker-web
+    volumes:
+      - ./:/workspace
+    post_start:
+      - command: /bin/bash -c 'rm -rf /usr/src/app && ln -s /workspace/loaner_tracker /usr/src/app'
+    ports:
+      - ${DEV_INTERFACE}:8000:8000
+
+  db:
+    build: ./postgres
+    restart: no
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_USER: django_db
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    hostname: loaner-tracker-db
+    volumes:
+    - ./postgres/data:/var/lib/postgresql/
+
+  adminer:
+    image: adminer
+    restart: no
+    ports:
+      - ${DEV_INTERFACE}:8080:8080
+    hostname: loaner-tracker-adminer
