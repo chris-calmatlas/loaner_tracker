@@ -10,9 +10,9 @@ services:
       - default
       - proxy
     hostname: loaner-tracker-proxy
-    ports:
-      - 80:80
-      - 443:443
+#    ports:
+#      - 80:80
+#      - 443:443
 
   web:
     build: ./loaner_tracker
@@ -55,5 +55,5 @@ networks:
   isolated:
     internal: true
   proxy:
-    # external: true
+    external: true
     name: ${PROXY_NETWORK}
