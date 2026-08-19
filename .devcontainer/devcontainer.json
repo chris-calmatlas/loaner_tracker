@@ -4,5 +4,5 @@
   "name": "Loaner Tracker",
   "dockerComposeFile": "../dev-compose.yaml",
   "service": "web",
-  "workspaceFolder": "/usr/src/app/"
+  "workspaceFolder": "/workspace"
 }

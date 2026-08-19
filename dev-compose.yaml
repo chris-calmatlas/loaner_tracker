@@ -11,7 +11,7 @@ services:
     post_start:
       - command: /bin/bash -c 'rm -rf /usr/src/app && ln -s /workspace/loaner_tracker /usr/src/app'
     ports:
-      - ${DEV_INTERFACE}:8000:8000
+      - 8000:8000
 
   db:
     build: ./postgres
@@ -29,11 +29,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     hostname: loaner-tracker-db
     volumes:
-    - ./postgres/data:/var/lib/postgresql/
+    - ./postgres/db-data:/var/lib/postgresql/
 
   adminer:
     image: adminer
     restart: no
     ports:
-      - ${DEV_INTERFACE}:8080:8080
+      - 8080:8080
     hostname: loaner-tracker-adminer

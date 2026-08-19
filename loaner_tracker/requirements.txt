@@ -3,3 +3,6 @@ python-dotenv
 gunicorn
 dj-database-url
 psycopg2
+djangorestframework
+markdown
+django-filter

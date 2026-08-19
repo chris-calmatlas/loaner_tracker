@@ -86,7 +86,7 @@ class thingDetailView(LoginRequiredMixin, View):
 
     # Update
     def post(self, request, id):
-        if "editors" not in request.user.groups.all().values_list("name"):
+        if not self.request.user.groups.filter(name='editors').exists():
             return HttpResponseForbidden("Not Authorized")
 
         thing = Thing.objects.filter(pk=id).first()
